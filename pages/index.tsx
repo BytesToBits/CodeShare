@@ -1,5 +1,6 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Text } from "@chakra-ui/react";
 
+import { FaCode } from "react-icons/fa";
 import style from "../styles/index.module.scss";
 
 export default function Home() {
@@ -18,6 +19,17 @@ export default function Home() {
       >
         The best way to share code.
       </Text>
+
+      <Button leftIcon={<FaCode />} colorScheme="facebook">Create Document</Button>
+
+      <Image 
+        alt="CodeView"
+        src="/CodeVector.png"
+        rounded={"10px"}
+        animation="floating 2s ease-in-out infinite alternate"
+        boxShadow="xl"
+        draggable={false}
+      />
     </Box>
   )
 }

@@ -5,3 +5,13 @@
     padding: 0;
     font-size: 'Poppins', sans-serif;
 }
+
+@keyframes floating {
+    from {
+        transform: translateY(0px, -5px);
+    }
+
+    to {
+        transform: translate(-5px, 20px);
+    }
+}
