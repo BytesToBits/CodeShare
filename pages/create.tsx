@@ -48,6 +48,7 @@ export default function CreateDocument() {
         { label: "Brainfuck", value: { grammar: Prism.languages.brainfuck, language: 'brainfuck' } },
         { label: "JSON", value: { grammar: Prism.languages.json, language: 'json' } },
         { label: "Rust", value: { grammar: Prism.languages.rust, language: 'rust' } },
+        { label: "Text", value: { grammar: Prism.languages.text, language: 'text' } },
     ]
 
     const { colorMode } = useColorMode()
@@ -88,6 +89,10 @@ export default function CreateDocument() {
                     highlight={code => Prism.highlight(code, codeSettings.grammar, codeSettings.language)}
                     textareaClassName={style.codeArea}
                     padding={10}
+                    style={{
+                        fontFamily: '"Fira code", "Fira Mono", monospace',
+                        fontSize: 16,
+                    }}
                 />
             </Box>
 
