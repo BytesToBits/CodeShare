@@ -1,8 +1,17 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
+import ColorManager from '../components/ColorManager';
+import { ChakraProvider } from "@chakra-ui/react";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
+import CodeShareTheme from "../styles/app.theme";
 
-export default MyApp
+import "../styles/app.scss";
+
+export default function CodeShareApp({ Component, pageProps }: AppProps) {
+  return (
+    <ChakraProvider resetCSS theme={CodeShareTheme}>
+      <ColorManager />
+
+      <Component {...pageProps} />
+    </ChakraProvider>
+  )
+};
