@@ -9,7 +9,7 @@ const config: ThemeConfig = {
     useSystemColorMode: true,
 };
 
-const colors: CodeShareTheme['colors'] = {
+export const colors: CodeShareTheme['colors'] = {
     background: {
         dark: "#113139",
         light: "#E1E1E1"

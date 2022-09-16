@@ -7,7 +7,7 @@ import axios from "axios";
 import style from "../styles/create.module.scss";
 import * as Prism from "prismjs"
 
-import { FaSave } from "react-icons/fa"
+import { FaKey, FaLock, FaSave, FaUnlock } from "react-icons/fa"
 import { useRouter } from "next/router";
 
 export default function CreateDocument() {
@@ -23,6 +23,9 @@ export default function CreateDocument() {
     const [isSaving, setSaving] = React.useState<boolean>(false);
     const [code, setCode] = React.useState<string>("const instructions = \"START WRITING SOME CODE!\"");
 
+    const [password, setPassword] = React.useState<string | null>(null);
+    const [isPrivate, setPrivate] = React.useState<boolean>(false);
+
     function handleSave() {
         setSaving(true);
 
@@ -32,8 +35,9 @@ export default function CreateDocument() {
                 title:"Error",
                 description:"Cannot create an empty document"
             })
+            setSaving(false)
         } else {
-            axios.post('/api/save', { content: code, language: codeSettings.value.language })
+            axios.post('/api/save', { content: code, language: codeSettings.value.language, private: isPrivate, password: password })
             .then((response) => {
                 router.push(`/${response.data.name}`)
             })
@@ -44,9 +48,48 @@ export default function CreateDocument() {
                     description: "There was an error creating this document.",
                 })
                 console.log(err)
+                setSaving(false)
             })
         }
-        setSaving(false)
+    }
+
+    function handleLock() {
+        if (isPrivate) {
+            toast({
+                status: "warning",
+                title: "Privacy Status Updated",
+                description: "The document will be created as Public"
+            })
+        } else {
+            toast({
+                status: "warning",
+                title: "Privacy Status Updated",
+                description: "The document will be created as Private"
+            })
+        }
+
+        setPrivate(!isPrivate)
+    }
+
+    function handlePassword() {
+        const newPassword = prompt("Enter the document password (or press enter to remove it)");
+
+        if(!newPassword) {
+            toast({
+                status: "warning",
+                title: "Password Status Updated",
+                description: "The password was removed from this document"
+            })
+        } else {
+            toast({
+                status: "warning",
+                title: "Password Status Updated",
+                description: "THe password for this document was set"
+            })
+        }
+
+        setPassword(newPassword)
+
     }
 
     return (
@@ -60,8 +103,10 @@ export default function CreateDocument() {
                 <Text bg={`background.${colorMode}`} p={2} roundedTop="10px" fontWeight={"medium"} fontStyle="italic" alignSelf="end" ml={2}>New File.{codeSettings.value.short || codeSettings.value.language}</Text>
 
 
-                <Flex ml="auto">
-                    <IconButton aria-label="Save Code" icon={<FaSave />} isDisabled={isSaving} onClick={handleSave} />
+                <Flex ml="auto" color="white">
+                    <IconButton background="none" aria-label="Toggle Private" icon={isPrivate ? <FaLock /> : <FaUnlock />} isDisabled={isSaving} onClick={handleLock} />
+                    <IconButton background="none" aria-label="Set Password" icon={<FaKey />} isDisabled={isSaving} onClick={handlePassword} />
+                    <IconButton background="none" aria-label="Save Code" icon={<FaSave />} isDisabled={isSaving} onClick={handleSave} />
 
                     <Selector />
                 </Flex>
