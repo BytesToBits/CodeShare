@@ -7,7 +7,7 @@ import axios from "axios";
 import style from "../styles/create.module.scss";
 import * as Prism from "prismjs"
 
-import { FaKey, FaLock, FaSave, FaUnlock } from "react-icons/fa"
+import { FaHome, FaKey, FaLock, FaPlusSquare, FaSave, FaUnlock } from "react-icons/fa"
 import { useRouter } from "next/router";
 
 export default function CreateDocument() {
@@ -104,8 +104,10 @@ export default function CreateDocument() {
 
 
                 <Flex ml="auto" color="white">
+                    <IconButton background="none" aria-label="Go Home" icon={<FaHome />} isDisabled={isSaving} onClick={() => router.push("/")} />
                     <IconButton background="none" aria-label="Toggle Private" icon={isPrivate ? <FaLock /> : <FaUnlock />} isDisabled={isSaving} onClick={handleLock} />
                     <IconButton background="none" aria-label="Set Password" icon={<FaKey />} isDisabled={isSaving} onClick={handlePassword} />
+                    <IconButton background="none" aria-label="New Document" icon={<FaPlusSquare />} isDisabled={isSaving} onClick={() => router.reload()} />
                     <IconButton background="none" aria-label="Save Code" icon={<FaSave />} isDisabled={isSaving} onClick={handleSave} />
 
                     <Selector />

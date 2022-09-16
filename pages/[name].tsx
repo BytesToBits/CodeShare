@@ -1,4 +1,4 @@
-import { AbsoluteCenter, Box, Flex, Heading, Input, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text, useColorMode, useDisclosure } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Flex, Heading, IconButton, Input, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text, useColorMode, useDisclosure } from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import Editor from "react-simple-code-editor";
@@ -8,6 +8,7 @@ import useLangSelector from "../lib/hooks/useLangSelector";
 import style from "../styles/create.module.scss";
 import Prism from "prismjs";
 import { CodeDocument } from "../lib/db/types";
+import { FaHome, FaPlusSquare } from "react-icons/fa";
 
 export default function ViewDocument({ document }: { document?: CodeDocument }) {
 
@@ -31,7 +32,7 @@ export default function ViewDocument({ document }: { document?: CodeDocument }) 
                 <ModalContent>
                     <ModalHeader>Document is Password Protected. Enter password to unlock.</ModalHeader>
                     <ModalBody>
-                        <Input type="password" autoComplete={"off"} name="documentProtection" onChange={(e) => { if(e.target.value == document.password) setShow(true) }} />
+                        <Input type="password" autoComplete={"off"} name="documentProtection" onChange={(e) => { if (e.target.value == document.password) setShow(true) }} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -48,6 +49,8 @@ export default function ViewDocument({ document }: { document?: CodeDocument }) 
 
 
                     <Flex ml="auto">
+                        <IconButton background="none" aria-label="Go Home" icon={<FaHome />} onClick={() => window.location.href = "/"} />
+                        <IconButton background="none" aria-label="New Document" icon={<FaPlusSquare />} onClick={() => window.location.href = "/create"} />
                         <Selector />
                     </Flex>
 

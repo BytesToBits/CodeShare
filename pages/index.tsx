@@ -30,8 +30,9 @@ function CodeBlock({ document }: { document: CodeDocument }) {
       cursor="pointer"
       transition=".5s ease"
       onClick={() => window.location.href = `/${document.name}`}
+      overflow="hidden"
     >
-      <Text fontWeight="bold" position="absolute" top="5px" right="10px">.{prismSettings.short}</Text>
+      <Text fontWeight="bold" position="absolute" top="5px" right="10px">.{prismSettings.short || prismSettings.language}</Text>
       <div dangerouslySetInnerHTML={{ __html: highlight }} />
     </Box>
   )
@@ -65,7 +66,7 @@ export default function Home({ documents }: { documents: CodeDocument[] }) {
 
       <Marquee
         speed={40}
-        gradientWidth={20}
+        gradientWidth={40}
         style={{
           margin: "30px 0px"
         }}
