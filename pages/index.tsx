@@ -1,10 +1,11 @@
 import { Box, Button, Heading, Image, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import { FaCode } from "react-icons/fa";
 import style from "../styles/index.module.scss";
 
 export default function Home() {
-  console.log(process.env.MONGO_URI)
+  const router = useRouter();
 
   return (
     <Box className={style.container}>
@@ -22,7 +23,9 @@ export default function Home() {
         The best way to share code.
       </Text>
 
-      <Button leftIcon={<FaCode />} colorScheme="facebook">Create Document</Button>
+      <Button leftIcon={<FaCode />} colorScheme="facebook" onClick={() => {
+        router.push("/create")
+      }}>Create Document</Button>
 
       <Image 
         alt="CodeView"
