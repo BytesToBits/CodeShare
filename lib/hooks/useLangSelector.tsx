@@ -23,27 +23,28 @@ import React from "react";
 import { Box, BoxProps } from "@chakra-ui/react";
 import SelectStyle from "../../styles/select.style";
 
+export const LANGUAGES: { [key:string]: { label: string, value: CodeSettings} } = {
+    javascript: { label: "JavaScript", value: { grammar: Prism.languages.javascript, language: 'javascript', short: 'js' } },
+    python: { label: "Python", value: { grammar: Prism.languages.python, language: 'python', short: 'py' } },
+    c: { label: "C", value: { grammar: Prism.languages.clike, language: 'c' } },
+    cpp: { label: "C++", value: { grammar: Prism.languages.clike, language: 'c++', short: 'cpp' } },
+    cs: { label: "C#", value: { grammar: Prism.languages.clike, language: 'c#' } },
+    java: { label: "Java", value: { grammar: Prism.languages.java, language: 'java' } },
+    kotlin: { label: "Kotlin", value: { grammar: Prism.languages.kotlin, language: 'kotlin', short: 'kt' } },
+    swift: { label: "Swift", value: { grammar: Prism.languages.swift, language: 'swift' } },
+    typescript: { label: "TypeScript", value: { grammar: Prism.languages.typescript, language: 'typescript', short: 'ts' } },
+    go: { label: "Go", value: { grammar: Prism.languages.go, language: 'go' } },
+    ruby: { label: "Ruby", value: { grammar: Prism.languages.ruby, language: 'ruby', short: 'rb' } },
+    r: { label: "R", value: { grammar: Prism.languages.r, language: 'r' } },
+    regex: { label: "Regex", value: { grammar: Prism.languages.regex, language: 'regex' } },
+    scala: { label: "Scala", value: { grammar: Prism.languages.scala, language: 'scala', short: 'scala' } },
+    brainfuck: { label: "Brainfuck", value: { grammar: Prism.languages.brainfuck, language: 'brainfuck', short: 'bf' } },
+    json: { label: "JSON", value: { grammar: Prism.languages.json, language: 'json' } },
+    rust: { label: "Rust", value: { grammar: Prism.languages.rust, language: 'rust', short: 'rs' } },
+    text: { label: "Text", value: { grammar: Prism.languages.text, language: 'text', short: 'txt' } },
+};
+
 export default function useLangSelector(defaultLanguage: string) {
-    const LANGUAGES: { [key:string]: { label: string, value: CodeSettings} } = {
-        javascript: { label: "JavaScript", value: { grammar: Prism.languages.javascript, language: 'javascript', short: 'js' } },
-        python: { label: "Python", value: { grammar: Prism.languages.python, language: 'python', short: 'py' } },
-        c: { label: "C", value: { grammar: Prism.languages.clike, language: 'c' } },
-        cpp: { label: "C++", value: { grammar: Prism.languages.clike, language: 'c++', short: 'cpp' } },
-        cs: { label: "C#", value: { grammar: Prism.languages.clike, language: 'c#' } },
-        java: { label: "Java", value: { grammar: Prism.languages.java, language: 'java' } },
-        kotlin: { label: "Kotlin", value: { grammar: Prism.languages.kotlin, language: 'kotlin', short: 'kt' } },
-        swift: { label: "Swift", value: { grammar: Prism.languages.swift, language: 'swift' } },
-        typescript: { label: "TypeScript", value: { grammar: Prism.languages.typescript, language: 'typescript', short: 'ts' } },
-        go: { label: "Go", value: { grammar: Prism.languages.go, language: 'go' } },
-        ruby: { label: "Ruby", value: { grammar: Prism.languages.ruby, language: 'ruby', short: 'rb' } },
-        r: { label: "R", value: { grammar: Prism.languages.r, language: 'r' } },
-        regex: { label: "Regex", value: { grammar: Prism.languages.regex, language: 'regex' } },
-        scala: { label: "Scala", value: { grammar: Prism.languages.scala, language: 'scala', short: 'scala' } },
-        brainfuck: { label: "Brainfuck", value: { grammar: Prism.languages.brainfuck, language: 'brainfuck', short: 'bf' } },
-        json: { label: "JSON", value: { grammar: Prism.languages.json, language: 'json' } },
-        rust: { label: "Rust", value: { grammar: Prism.languages.rust, language: 'rust', short: 'rs' } },
-        text: { label: "Text", value: { grammar: Prism.languages.text, language: 'text', short: 'txt' } },
-    };
 
     const [codeSettings, setCodeSettings] = React.useState<{ label: string, value: CodeSettings }>(LANGUAGES[defaultLanguage.toLocaleLowerCase()] || LANGUAGES.javascript);
 

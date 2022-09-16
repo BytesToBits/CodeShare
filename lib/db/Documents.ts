@@ -23,3 +23,9 @@ export async function findDocument(name: string): Promise<CodeDocument | null> {
 
     return query;
 }
+
+export async function getAllDocuments(): Promise<CodeDocument[]> {
+    const query = await CodeDocumentModel.find({});
+
+    return query;
+}

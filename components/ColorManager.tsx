@@ -16,7 +16,8 @@ export default function ColorManager(): JSX.Element {
         },
         position: "fixed",
         bottom: "10px",
-        right: "10px"
+        right: "10px",
+        zIndex: 9999
     };
 
     return (

@@ -9,12 +9,14 @@ const config: ThemeConfig = {
     useSystemColorMode: true,
 };
 
-export const colors: CodeShareTheme['colors'] = {
+export const colors = {
     background: {
         dark: "#113139",
         light: "#E1E1E1"
     },
-};
+}
+
+const themeColors: CodeShareTheme['colors'] = colors;
 
 const styles: Styles = {
     global: (props: StyleFunctionProps) => ({
@@ -31,7 +33,7 @@ const components = {
 const theme: CodeShareTheme = {
     config,
     styles,
-    colors,
+    colors: themeColors,
     components
 };
 
