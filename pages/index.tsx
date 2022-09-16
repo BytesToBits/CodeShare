@@ -82,6 +82,7 @@ export default function Home({ documents }: { documents: CodeDocument[] }) {
         animation="floating 2s ease-in-out infinite alternate"
         boxShadow="xl"
         draggable={false}
+        mb={10}
       />
     </Box>
   )
