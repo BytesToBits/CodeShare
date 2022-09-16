@@ -4,6 +4,8 @@ import { FaCode } from "react-icons/fa";
 import style from "../styles/index.module.scss";
 
 export default function Home() {
+  console.log(process.env.MONGO_URI)
+
   return (
     <Box className={style.container}>
       <Heading

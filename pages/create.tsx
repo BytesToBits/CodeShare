@@ -2,16 +2,18 @@ import { Box, Flex, IconButton, Text, useColorMode, useToast } from "@chakra-ui/
 import React from "react";
 import Editor from "react-simple-code-editor";
 import useLangSelector from "../lib/hooks/useLangSelector";
+import axios from "axios";
 
 import style from "../styles/create.module.scss";
 import * as Prism from "prismjs"
 
 import { FaSave } from "react-icons/fa"
+import { useRouter } from "next/router";
 
 export default function CreateDocument() {
-
+    const router = useRouter();
     const { colorMode } = useColorMode();
-    const { codeSettings, setCodeSettings, Selector } = useLangSelector("javascript");
+    const { codeSettings, Selector } = useLangSelector("javascript");
     const toast = useToast({
         position: "bottom",
         variant: "top-accent",
@@ -30,10 +32,21 @@ export default function CreateDocument() {
                 title:"Error",
                 description:"Cannot create an empty document"
             })
-            setSaving(false);
         } else {
-            // handle save
+            axios.post('/api/save', { content: code, language: codeSettings.value.language })
+            .then((response) => {
+                router.push(`/${response.data.name}`)
+            })
+            .catch((err) => {
+                toast({
+                    status: "error",
+                    title: "Error",
+                    description: "There was an error creating this document.",
+                })
+                console.log(err)
+            })
         }
+        setSaving(false)
     }
 
     return (
@@ -44,7 +57,7 @@ export default function CreateDocument() {
             direction="column"
         >
             <Flex alignItems="center" h="50px" bg="blackAlpha.900" px={2}>
-                <Text bg={`background.${colorMode}`} p={2} roundedTop="10px" fontWeight={"medium"} fontStyle="italic" alignSelf="end" ml={2}>New File.txt</Text>
+                <Text bg={`background.${colorMode}`} p={2} roundedTop="10px" fontWeight={"medium"} fontStyle="italic" alignSelf="end" ml={2}>New File.{codeSettings.value.short || codeSettings.value.language}</Text>
 
 
                 <Flex ml="auto">

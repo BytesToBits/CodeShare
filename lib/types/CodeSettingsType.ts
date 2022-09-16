@@ -1,4 +1,5 @@
 export type CodeSettings = {
     grammar: Prism.Grammar,
-    language: string
+    language: string,
+    short?: string
 }
