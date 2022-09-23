@@ -42,7 +42,7 @@ export default function ViewDocument({ document }: { document?: CodeDocument }) 
                 w="100vw"
                 overflow={"auto"}
                 direction="column"
-                opacity={show ? 1 : 0}
+                hidden={!show}
             >
                 <Flex alignItems="center" h="50px" bg="blackAlpha.900" px={2}>
                     <Text bg={`background.${colorMode}`} p={2} roundedTop="10px" fontWeight={"medium"} fontStyle="italic" alignSelf="end" ml={2}>{document.name}.{codeSettings.value.short || codeSettings.value.language}</Text>
