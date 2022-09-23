@@ -1,7 +1,5 @@
-import { IconButton, useColorMode, IconButtonProps } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
 import React from "react";
-
-import { FaSun, FaMoon } from "react-icons/fa"
 
 export default function ColorManager(): JSX.Element {
     const { colorMode, setColorMode } = useColorMode();
@@ -24,7 +22,9 @@ export default function ColorManager(): JSX.Element {
     //     <IconButton {...iconProps} />
     // )
 
-    if(colorMode == "light") setColorMode("dark")
+    React.useEffect(() => {
+        if(colorMode == "light") setColorMode("dark")
+    })
 
     return <></>
 
