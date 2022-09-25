@@ -1,6 +1,6 @@
 import { AbsoluteCenter, Box, Flex, Heading, IconButton, Input, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text, useColorMode, useDisclosure } from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import Editor from "react-simple-code-editor";
 import { findDocument } from "../lib/db/Documents";
 import useLangSelector from "../lib/hooks/useLangSelector";
@@ -9,9 +9,14 @@ import style from "../styles/create.module.scss";
 import Prism from "prismjs";
 import { CodeDocument } from "../lib/db/types";
 import { FaHome, FaPlusSquare } from "react-icons/fa";
+import Head from "next/head";
+import * as CryptoJS from "crypto-js";
 
-export default function ViewDocument({ document }: { document?: CodeDocument }) {
+interface ViewDocumentProps {
+    document: CodeDocument
+}
 
+export default function ViewDocument({ document, ...rest }: ViewDocumentProps) {
     const { codeSettings, Selector } = useLangSelector(document?.language || "javascript");
     const { colorMode } = useColorMode();
     const [show, setShow] = React.useState<boolean>(document?.password == null);
@@ -27,12 +32,16 @@ export default function ViewDocument({ document }: { document?: CodeDocument }) 
 
     return (
         <>
+            <Head>
+                <meta name="216527" title="epal-id" />
+                <meta name="e-chat" title="epal-tab" />
+            </Head>
             <Modal onClose={() => null} isOpen={!show} isCentered={true}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Document is Password Protected. Enter password to unlock.</ModalHeader>
                     <ModalBody>
-                        <Input type="password" autoComplete={"off"} name="documentProtection" onChange={(e) => { if (e.target.value == document.password) setShow(true) }} />
+                        <Input type="password" autoComplete={"off"} name="documentProtection" onChange={(e) => { if (e.target.value == CryptoJS.AES.decrypt(document!.password!, document.name).toString(CryptoJS.enc.Utf8)) setShow(true) }} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -58,7 +67,7 @@ export default function ViewDocument({ document }: { document?: CodeDocument }) 
 
                 <Box h="100%" w="100%">
                     <Editor
-                        value={document!.content!}
+                        value={CryptoJS.AES.decrypt(document!.content!, document.name).toString(CryptoJS.enc.Utf8)}
                         onValueChange={() => null}
                         highlight={code => Prism.highlight(code, codeSettings.value.grammar, codeSettings.value.language)}
                         textareaClassName={style.codeArea}
@@ -78,16 +87,21 @@ export default function ViewDocument({ document }: { document?: CodeDocument }) 
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const { name } = ctx.query;
-
     const document = await findDocument(name as string);
+
+    if(!document) return {
+        props: {
+            document: null
+        }
+    }
 
     return {
         props: {
             document: {
-                name: document?.name,
-                language: document?.language,
-                content: document?.content,
-                password: document?.password || null
+                name: document.name,
+                language: document.language,
+                content: CryptoJS.AES.encrypt(document.content, document.name).toString(),
+                password: document.password ? CryptoJS.AES.encrypt(document.password, document.name).toString() : null
             }
         }
     }
