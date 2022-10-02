@@ -46,40 +46,41 @@ export default function ViewDocument({ document, ...rest }: ViewDocumentProps) {
                 </ModalContent>
             </Modal>
 
-            <Flex
-                h="100vh"
-                w="100vw"
-                overflow={"auto"}
-                direction="column"
-                hidden={!show}
-            >
-                <Flex alignItems="center" h="50px" bg="blackAlpha.900" px={2}>
-                    <Text bg={`background.${colorMode}`} p={2} roundedTop="10px" fontWeight={"medium"} fontStyle="italic" alignSelf="end" ml={2}>{document.name}.{codeSettings.value.short || codeSettings.value.language}</Text>
+            {show && (
+                <Flex
+                    h="100vh"
+                    w="100vw"
+                    overflow={"auto"}
+                    direction="column"
+                >
+                    <Flex alignItems="center" h="50px" bg="blackAlpha.900" px={2}>
+                        <Text bg={`background.${colorMode}`} p={2} roundedTop="10px" fontWeight={"medium"} fontStyle="italic" alignSelf="end" ml={2}>{document.name}.{codeSettings.value.short || codeSettings.value.language}</Text>
 
 
-                    <Flex ml="auto">
-                        <IconButton background="none" aria-label="Go Home" icon={<FaHome />} onClick={() => window.location.href = "/"} />
-                        <IconButton background="none" aria-label="New Document" icon={<FaPlusSquare />} onClick={() => window.location.href = "/create"} />
-                        <Selector />
+                        <Flex ml="auto">
+                            <IconButton background="none" aria-label="Go Home" icon={<FaHome />} onClick={() => window.location.href = "/"} />
+                            <IconButton background="none" aria-label="New Document" icon={<FaPlusSquare />} onClick={() => window.location.href = "/create"} />
+                            <Selector />
+                        </Flex>
+
                     </Flex>
 
+                    <Box h="100%" w="100%">
+                        <Editor
+                            value={CryptoJS.AES.decrypt(document!.content!, document.name).toString(CryptoJS.enc.Utf8)}
+                            onValueChange={() => null}
+                            highlight={code => Prism.highlight(code, codeSettings.value.grammar, codeSettings.value.language)}
+                            textareaClassName={style.codeArea}
+                            padding={10}
+                            style={{
+                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontSize: 16,
+                            }}
+                        />
+                    </Box>
+
                 </Flex>
-
-                <Box h="100%" w="100%">
-                    <Editor
-                        value={CryptoJS.AES.decrypt(document!.content!, document.name).toString(CryptoJS.enc.Utf8)}
-                        onValueChange={() => null}
-                        highlight={code => Prism.highlight(code, codeSettings.value.grammar, codeSettings.value.language)}
-                        textareaClassName={style.codeArea}
-                        padding={10}
-                        style={{
-                            fontFamily: '"Fira code", "Fira Mono", monospace',
-                            fontSize: 16,
-                        }}
-                    />
-                </Box>
-
-            </Flex>
+            )}
         </>
     )
 
@@ -89,7 +90,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const { name } = ctx.query;
     const document = await findDocument(name as string);
 
-    if(!document) return {
+    if (!document) return {
         props: {
             document: null
         }
