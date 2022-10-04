@@ -30,6 +30,8 @@ export default function ViewDocument({ document, ...rest }: ViewDocumentProps) {
         )
     }
 
+    const key = process.env.NEXT_PUBLIC_SECRET!
+
     return (
         <>
             <Head>
@@ -41,7 +43,7 @@ export default function ViewDocument({ document, ...rest }: ViewDocumentProps) {
                 <ModalContent>
                     <ModalHeader>Document is Password Protected. Enter password to unlock.</ModalHeader>
                     <ModalBody>
-                        <Input type="password" autoComplete={"off"} name="documentProtection" onChange={(e) => { if (e.target.value == CryptoJS.AES.decrypt(document!.password!, document.name).toString(CryptoJS.enc.Utf8)) setShow(true) }} />
+                        <Input type="password" autoComplete={"off"} name="documentProtection" onChange={(e) => { if (e.target.value == CryptoJS.AES.decrypt(document!.password!, key).toString(CryptoJS.enc.Utf8)) setShow(true) }} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -67,7 +69,7 @@ export default function ViewDocument({ document, ...rest }: ViewDocumentProps) {
 
                     <Box h="100%" w="100%">
                         <Editor
-                            value={CryptoJS.AES.decrypt(document!.content!, document.name).toString(CryptoJS.enc.Utf8)}
+                            value={CryptoJS.AES.decrypt(document!.content!, key).toString(CryptoJS.enc.Utf8)}
                             onValueChange={() => null}
                             highlight={code => Prism.highlight(code, codeSettings.value.grammar, codeSettings.value.language)}
                             textareaClassName={style.codeArea}
@@ -89,6 +91,7 @@ export default function ViewDocument({ document, ...rest }: ViewDocumentProps) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const { name } = ctx.query;
     const document = await findDocument(name as string);
+    const key = process.env.NEXT_PUBLIC_SECRET!;
 
     if (!document) return {
         props: {
@@ -101,8 +104,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             document: {
                 name: document.name,
                 language: document.language,
-                content: CryptoJS.AES.encrypt(document.content, document.name).toString(),
-                password: document.password ? CryptoJS.AES.encrypt(document.password, document.name).toString() : null
+                content: CryptoJS.AES.encrypt(document.content, key).toString(),
+                password: document.password ? CryptoJS.AES.encrypt(document.password, key).toString() : null
             }
         }
     }
