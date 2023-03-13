@@ -20,9 +20,13 @@ function hexToRgb(hex: string): [number, number, number] {
 }
 
 function CodeBlock({ document }: { document: CodeDocument }) {
-  const prismSettings = LANGUAGES[document.language].value;
+  const prismSettings = LANGUAGES[document.language]?.value;
+  let highlight;
 
-  const highlight = Prism.highlight(document.content, prismSettings.grammar, prismSettings.language);
+  if(prismSettings) {
+    highlight = Prism.highlight(document.content, prismSettings.grammar, prismSettings.language);
+  }
+
 
   return (
     <Box p={5} rounded="md" bg="gray.800" color="white" position="relative" w={"300px"} h="100px" mx={5}
@@ -32,8 +36,8 @@ function CodeBlock({ document }: { document: CodeDocument }) {
       onClick={() => window.location.href = `/${document.name}`}
       overflow="hidden"
     >
-      <Text fontWeight="bold" position="absolute" top="5px" right="10px">.{prismSettings.short || prismSettings.language}</Text>
-      <div dangerouslySetInnerHTML={{ __html: highlight }} />
+      <Text fontWeight="bold" position="absolute" top="5px" right="10px">.{prismSettings?.short || prismSettings?.language}</Text>
+      <div dangerouslySetInnerHTML={{ __html: highlight || "" }} />
     </Box>
   )
 
@@ -56,7 +60,7 @@ export default function Home({ documents }: { documents: CodeDocument[] }) {
       <Text
         fontSize="2xl"
       >
-        The best way to share code.
+        The best way to share code.....
       </Text>
 
       <Button leftIcon={<FaCode />} colorScheme="facebook" onClick={() => {
